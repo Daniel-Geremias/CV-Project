@@ -5,23 +5,19 @@ const CVData = {
         email: "",
         phone: ""
     },
-    education: [
-        {
-            school: "",
-            course: "",
-            startDate: "",
-            endDate: ""
-        }
-    ],
-    experience: [
-        {
-            company: "",
-            position: "",
-            tasks: "",
-            startDate: "",
-            endDate: ""
-        }
-    ]
+    education: {
+        school: "",
+        course: "",
+        startDate: "",
+        endDate: ""
+    },
+    experience:{
+        company: "",
+        position: "",
+        tasks: "",
+        startDate: "",
+        endDate: ""
+    }
 }
 
 export default CVData
