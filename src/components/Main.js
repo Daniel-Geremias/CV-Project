@@ -1,44 +1,35 @@
 import React from "react";
-import Form from "./Form"
-import CVPrint from "./CVPrint"
+import CVData from "./CVData";
+import PersonalInfo from "./PersonalInfo"
 
-export default class Main extends React.Component {
-    render() {
-        const cv = {
-                name: "Joe",
-                location: "Brazil",
-                email: "joe@gmail.com",
-                phone: "00000-0000",
-                education: [
-                        {
-                            school: "Harvard",
-                            course: "IT",
-                            startDate: "Jan 5th, 2010",
-                            endDate: "Dec 15th, 2014"
-                        },
-                        {
-                            school: "Yale",
-                            course: "IT",
-                            startDate: "Jan 5th, 2010",
-                            endDate: "Dec 15th, 2014"
-                        }
-                    ],
-                experience: [
-                    {
-                        company: "IBM",
-                        position: "Juniot IT",
-                        tasks: "Fix problems and report fixes",
-                        startDate: "Jan 10th, 2015",
-                        endDate: "Dec 18th, 2019"
-                    }
-                    ]
-            }
-        return (
-            <div className="main">
-                <Form />
-                <CVPrint cv={cv}/>
-            </div>
+export default function Main() {
+    const [personalData, setPersonalData] = React.useState(
+        JSON.parse(localStorage.getItem("personalData")) ||
+        CVData.personalInfo)
+
+    function handleChange(event) {
+        const {name, value} = event.target
+        setPersonalData(prevPersonalData => ({
+            ...prevPersonalData,
+            [name]: value})
         )
     }
+
+    function onSubmit(event) {
+        event.preventDefault()
+    }
+
+    React.useEffect(() => {
+        localStorage.setItem("personalData", JSON.stringify(personalData))}, [personalData])
+
+    return (
+        <main className="main">
+            <PersonalInfo
+                PersonalInfo={personalData}
+                handleChange={handleChange}
+                onSubmit={onSubmit}
+            />
+        </main>
+    )
 }
 
