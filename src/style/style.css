@@ -1,21 +1,25 @@
-html, body {
+html, body, .root, .app {
     font-family: 'Courier New', Courier, monospace;
     margin: 0;
     height: 100%;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 header {
     text-align: center;
 }
 
-form {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    padding: 30px;
+main {
+    display: flex;
 }
 
-button {
-    grid-area: 2fr;
+.cv-form {
+    max-width: 600px;
 }
 
 footer {

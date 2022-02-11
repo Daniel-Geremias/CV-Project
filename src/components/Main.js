@@ -3,12 +3,11 @@ import CVData from "./CVData";
 import Education from "./Education";
 import Experience from "./Experience";
 import PersonalInfo from "./PersonalInfo"
+import PreviewCV from "./PreviewCV";
 
 export default function Main() {
     // Personal Data handling
-    const [personalData, setPersonalData] = React.useState(
-        JSON.parse(localStorage.getItem("personalData")) ||
-        CVData.personalInfo)
+    const [personalData, setPersonalData] = React.useState(CVData.personalInfo)
 
     function personalChange(event) {
         const {name, value} = event.target
@@ -17,9 +16,6 @@ export default function Main() {
             [name]: value})
         )
     }
-        
-    React.useEffect(() => {
-        localStorage.setItem("personalData", JSON.stringify(personalData))}, [personalData])
 
     function personalSubmit(event) {
         event.preventDefault()
@@ -27,15 +23,11 @@ export default function Main() {
             ...prevCV,
             personalInfo: personalData
         }))
-        console.log(CV)
     }
     
     // Education Data handling
 
-    const [educationData, setEducationData] = React.useState(
-        JSON.parse(localStorage.getItem("educationData")) ||    
-        CVData.education
-    )
+    const [educationData, setEducationData] = React.useState(CVData.education)
 
     function educationChange(event) {
         const {name, value} = event.target
@@ -49,20 +41,16 @@ export default function Main() {
         event.preventDefault()
         setCV(prevCV => ({
             ...prevCV,
-            educationList: prevCV.educationList.push(educationData)
+            educationList: [
+                ...prevCV.educationList,
+                educationData
+            ]
         }))
-        console.log(CV)
     }
-
-    React.useEffect(() => {
-        localStorage.setItem("educationData", JSON.stringify(educationData))}, [educationData]
-    )
 
     // Experience Data handling
 
-    const [experienceData, setExperienceData] = React.useState(
-        CVData.experience
-    )
+    const [experienceData, setExperienceData] = React.useState(CVData.experience)
 
     function experienceChange(event) {
         const {name, value} = event.target
@@ -76,39 +64,49 @@ export default function Main() {
         event.preventDefault()
         setCV(prevCV => ({
             ...prevCV,
-            experienceList: prevCV.experienceList.push(experienceData)
+            experienceList: [
+                ...prevCV.experienceList,
+                experienceData
+            ]
         }))
-        console.log(CV)
     }
-
-    React.useEffect(() => {
-        localStorage.setItem("experienceData", JSON.stringify(experienceData))}, [experienceData]
-    )
 
     // Show CV info
     const [CV, setCV] = React.useState({
         personalInfo: "",
-        educationList: [],
-        experienceList: []
+        educationList: "",
+        experienceList: "",
+        showCV: false
     })
+
+    function previewCV() {
+        setCV(prevCV => ({
+            ...prevCV,
+            showCV: !prevCV.showCV
+        }))
+    }
 
     return (
         <main className="main">
-            <PersonalInfo
-                personalData={personalData}
-                personalChange={personalChange}
-                personalSubmit={personalSubmit}
-            />
-            <Education
-                educationData={educationData}
-                educationChange={educationChange}
-                educationSubmit={educationSubmit}
-            />
-            <Experience 
-                experienceData={experienceData}
-                experienceChange={experienceChange}
-                experienceSubmit={experienceSubmit}
-            />
+            <div className="cv-form">
+                <PersonalInfo
+                    personalData={personalData}
+                    personalChange={personalChange}
+                    personalSubmit={personalSubmit}
+                />
+                <Education
+                    educationData={educationData}
+                    educationChange={educationChange}
+                    educationSubmit={educationSubmit}
+                />
+                <Experience 
+                    experienceData={experienceData}
+                    experienceChange={experienceChange}
+                    experienceSubmit={experienceSubmit}
+                />
+                <button onClick={previewCV}>{CV.showCV ? "Hide" : "Preview"}</button>
+            </div>
+            {CV.showCV && <PreviewCV CV={CV} />}
         </main>
     )
 }
