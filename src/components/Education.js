@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Education(props) {
     return (
-        <form className="education-form">
+        <form className="education-form" onSubmit={props.educationSubmit}>
             <label htmlFor="school">School</label>
             <input 
                 type="text"

@@ -3,7 +3,6 @@ import CVData from "./CVData";
 import Education from "./Education";
 import Experience from "./Experience";
 import PersonalInfo from "./PersonalInfo"
-import ShowCV from "./ShowCV";
 
 export default function Main() {
     // Personal Data handling
@@ -18,6 +17,9 @@ export default function Main() {
             [name]: value})
         )
     }
+        
+    React.useEffect(() => {
+        localStorage.setItem("personalData", JSON.stringify(personalData))}, [personalData])
 
     function personalSubmit(event) {
         event.preventDefault()
@@ -25,12 +27,9 @@ export default function Main() {
             ...prevCV,
             personalInfo: personalData
         }))
+        console.log(CV)
     }
-
-    React.useEffect(() => {
-        localStorage.setItem("personalData", JSON.stringify(personalData))}, [personalData])
-
-
+    
     // Education Data handling
 
     const [educationData, setEducationData] = React.useState(
@@ -48,6 +47,11 @@ export default function Main() {
 
     function educationSubmit(event) {
         event.preventDefault()
+        setCV(prevCV => ({
+            ...prevCV,
+            educationList: prevCV.educationList.push(educationData)
+        }))
+        console.log(CV)
     }
 
     React.useEffect(() => {
@@ -70,6 +74,11 @@ export default function Main() {
 
     function experienceSubmit(event) {
         event.preventDefault()
+        setCV(prevCV => ({
+            ...prevCV,
+            experienceList: prevCV.experienceList.push(experienceData)
+        }))
+        console.log(CV)
     }
 
     React.useEffect(() => {
@@ -88,12 +97,12 @@ export default function Main() {
             <PersonalInfo
                 personalData={personalData}
                 personalChange={personalChange}
-                onSubmit={personalSubmit}
+                personalSubmit={personalSubmit}
             />
             <Education
                 educationData={educationData}
                 educationChange={educationChange}
-                onSubmit={educationSubmit}
+                educationSubmit={educationSubmit}
             />
             <Experience 
                 experienceData={experienceData}
